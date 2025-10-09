@@ -1,0 +1,38 @@
+apiVersion : apps/v1
+kind : Deployment
+metadata :
+  name : django-deploy
+  labels :
+    app : django-nunit
+spec :
+  selector:
+    matchLabels:
+      app : django
+  template :
+    metadata :
+      labels :
+        app : django
+    spec :    
+      containers :
+      - name : django-nunit-container
+        image : django_app:latest
+        imagePullPolicy : Never
+        envFrom :
+        - secretRef :
+            name : django-secrets
+        env:
+        - name : DEBUG
+          value : '1'
+        ports :
+        - containerPort : 80
+---
+apiVersion : v1
+kind : Service
+metadata :
+  name : django-test-service
+spec :
+  type : NodePort
+  selector :
+    app : django
+  ports :
+    - port : 80
