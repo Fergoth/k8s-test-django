@@ -77,13 +77,21 @@ $ docker compose build web
 `DATABASE_URL` -- адрес для подключения к базе данных PostgreSQL. Другие СУБД сайт не поддерживает. [Формат записи](https://github.com/jacobian/dj-database-url#url-schema).
 
 # Как запустить сайт для локальной разработки
-
-
 ## Запуск minikube
+```shell
+minikube start
+```
 ## Загрузка образа в minikube
+Посмотрите image 
+```shell
+docker images
+```
+и загрузите образа в minikube:
+```shell
+minikube image load [name]
+```
 ## Установка секретов
 Создать файл kuber_secrets.yaml с переменными окружения:
-
 
 ```yaml
 apiVersion : v1
@@ -99,4 +107,23 @@ stringData :
 
 ```shell
 kubectl apply -f kuber/kuber_secrets.yaml 
+```
+
+## Запуск приложения
+Запустить:
+```shell
+kubectl apply -f kuber/kuber_deployment.yaml 
+```
+Применить миграции:
+```shell
+kubectl apply -f kuber/migrate_job.yaml 
+```
+
+Установить cronjob по удалению сессий:
+```shell
+kubectl apply -f kuber/clearsession.yaml 
+```
+Установить ingress:
+```shell
+kubectl apply -f kuber/ingress.yaml 
 ```
