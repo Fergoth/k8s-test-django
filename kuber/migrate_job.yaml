@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate
+spec:
+  template:
+    spec:
+      containers:
+      - name: migrate
+        envFrom :
+        - secretRef :
+            name : django-secrets
+        image: django_app:latest
+        imagePullPolicy: Never
+        command:
+            - /bin/sh
+            - -c
+            - python manage.py migrate --noinput
+      restartPolicy: Never
+  backoffLimit: 2
