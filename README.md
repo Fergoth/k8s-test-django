@@ -123,7 +123,31 @@ kubectl apply -f kuber/migrate_job.yaml
 ```shell
 kubectl apply -f kuber/clearsession.yaml 
 ```
+Установить services:
+```shell
+kubectl apply -f kuber/services.yaml 
+```
+
 Установить ingress:
 ```shell
 kubectl apply -f kuber/ingress.yaml 
 ```
+ Установить постгресс через хелм в кластере или запустить в отдельном контейнере (подключаться через внутренний айпи)
+
+ Установка через helm
+
+ ```shell
+ helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql
+ ```
+
+ Подключитесь через psql по инструкции после этой команды и создайте базу и пользователя
+
+ После чего в секретах укажите
+ подключение в формате  postgres://USER:PASSWORD@HOST:PORT/NAME
+ HOST можно взять в информации после запуска через helm в этих строках
+ ```shell
+ PostgreSQL can be accessed via port 5432 on the following DNS names from within your cluster:
+
+    my-release-postgresql.default.svc.cluster.local - Read/Write connection
+
+ ```
