@@ -38,7 +38,7 @@ spec:
     - name: secret-volume
       secret: 
         secretName: [Имя секрета которое указывали выше]
-		defaultMode: 429
+        defaultMode: 429
   containers:
     - name: ubuntu
       image: ubuntu:latest
