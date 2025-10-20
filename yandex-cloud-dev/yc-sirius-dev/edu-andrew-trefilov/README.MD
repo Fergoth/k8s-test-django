@@ -101,3 +101,6 @@ python manage.py createsuperuser
 Например https://edu-andrey-trefilov.yc-sirius-dev.pelid.team/
 
 Для запуска прод версии поменяйте DEBUG на 0
+
+Пример выделенной инфраструктуры
+https://sirius-env-registry.website.yandexcloud.net/edu-andrey-trefilov.html
