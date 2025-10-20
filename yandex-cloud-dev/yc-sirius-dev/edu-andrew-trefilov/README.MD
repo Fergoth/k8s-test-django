@@ -17,7 +17,7 @@ CoreDNS is running at https://84.201.152.191/api/v1/namespaces/kube-system/servi
 
 ![](https://github.com/Fergoth/k8s-test-django/raw/main/github_images/image-1.png)
 
-[Получите ssl сертификат](https://yandex.cloud/ru/docs/managed-postgresql/operations/connect) 
+### [Получите ssl сертификат](https://yandex.cloud/ru/docs/managed-postgresql/operations/connect) 
 Добавьте новый секрет в свой namespace
 
 В поле value вставьте значение своего сертификата
@@ -53,3 +53,51 @@ spec:
 psql -h HOST -p PORT -U USER -d NAME
 ```
 Все данные для подключения лежат в секрете postgres
+
+### Добавьте Секрет через Lens c именем django-secrets
+DATABASE_URL : postgres://[Имя пользователя]:[Пароль ]@[Хост ]:[Порт ]/[Имя бд]  (все значения лежат в secrete postgres)
+SECRET_KEY : [Ваш супер секретный ключ]
+ALLOWED_HOSTS : [Ваш домен]
+### Создайте сервис для приложения django
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-service
+  namespace: [ВАШ namespace]
+spec:
+  type: ClusterIP
+  selector:
+    app: django
+  ports:
+    - port: 8000
+      targetPort: 80
+```
+
+### Поменяйте в Config Maps настройки Nginx и перезапустите deployment nginx
+
+```
+server {
+            listen       80;
+            server_name  localhost;
+            location / {
+                proxy_pass http://django-service:8000;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+            }
+        }
+```
+
+### Зайдите в под примините миграции и создайте суперпользователя
+```shell
+python manage.py migrate
+python manage.py createsuperuser
+```
+
+После чего зайдите в админку по вашему выделеному домену 
+Например https://edu-andrey-trefilov.yc-sirius-dev.pelid.team/
+
+Для запуска прод версии поменяйте DEBUG на 0

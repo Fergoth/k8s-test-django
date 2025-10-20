@@ -1,0 +1,37 @@
+apiVersion : apps/v1
+kind : Deployment
+metadata :
+  namespace : edu-andrey-trefilov
+  name : django-deploy
+  labels :
+    app : django-nunit
+spec :
+  selector:
+    matchLabels:
+      app : django
+  template :
+    metadata :
+      namespace : edu-andrey-trefilov
+      labels :
+        app : django
+    spec :
+      volumes :
+      - name : secret-volume
+        secret :
+          secretName : yandex-root-ca-crt-secret
+          defaultMode: 429
+      containers :
+      - name : django-nunit-container
+        image : fergoth/k8s_2:sha256:79ae6a0a6f65a09e9ca8626f39d190fb13b6c68d6d7935755fcc5422cf9084b3
+        envFrom :
+        - secretRef :
+            name : django-secrets
+        env:
+        - name : DEBUG
+          value : '1'
+        ports :
+        - containerPort : 80
+        volumeMounts:
+        - name : secret-volume
+          mountPath : "root/.postgresql/"
+
