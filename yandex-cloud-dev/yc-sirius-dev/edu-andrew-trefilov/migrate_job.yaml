@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      containers:
+      - name: migrate
+        envFrom :
+        - secretRef :
+            name : django-secrets
+        image: fergoth/k8s_2:sha256:79ae6a0a6f65a09e9ca8626f39d190fb13b6c68d6d7935755fcc5422cf9084b3
+        command:
+            - /bin/sh
+            - -c
+            - python manage.py migrate --noinput
+      restartPolicy: Never
+  backoffLimit: 2
