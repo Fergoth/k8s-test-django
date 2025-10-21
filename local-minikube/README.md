@@ -36,31 +36,31 @@ stringData :
 Запустить:
 
 ```shell
-kubectl apply -f kuber/kuber_secrets.yaml 
+kubectl apply -f kuber_secrets.yaml 
 ```
 
 ## Запуск приложения
 Запустить:
 ```shell
-kubectl apply -f kuber/kuber_deployment.yaml 
+kubectl apply -f kuber_deployment.yaml 
 ```
 Применить миграции:
 ```shell
-kubectl apply -f kuber/migrate_job.yaml 
+kubectl apply -f migrate_job.yaml 
 ```
 
 Установить cronjob по удалению сессий:
 ```shell
-kubectl apply -f kuber/clearsession.yaml 
+kubectl apply -f clearsession.yaml 
 ```
 Установить services:
 ```shell
-kubectl apply -f kuber/services.yaml 
+kubectl apply -f services.yaml 
 ```
 
 Установить ingress:
 ```shell
-kubectl apply -f kuber/ingress.yaml 
+kubectl apply -f ingress.yaml 
 ```
  Установить постгресс через хелм в кластере или запустить в отдельном контейнере (подключаться через внутренний айпи)
 
